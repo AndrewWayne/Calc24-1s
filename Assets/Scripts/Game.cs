@@ -9,7 +9,8 @@ public class Game : MonoBehaviour {
 	public int score;//计分器
 	public static int[,] Numbers;//这是数字排列库
 	public static int[,] Symbols;//字符排列库
-	public static int i;//这是数组的序列号
+	public static int w,x,y,z;//这是数组的序列号
+	public static int i;
 	public string message;//debug用（没啥用）
 	public int Life;//生命值计算
 	private string ss;//答案文本
@@ -22,6 +23,8 @@ public class Game : MonoBehaviour {
 	bool passright;
 	System.Random hello = new System.Random ();//这个东西是一把玄学大门的钥匙
 	string cs;
+	public static int index2;
+	public static int[,] numberss = new int[4, 24];
 	// Update is called once per frame
 	void Update () {
 
@@ -44,9 +47,9 @@ public class Game : MonoBehaviour {
 
 	void Start()
 	{
-		Numbers = new int[4,434006];
+	//	Numbers = new int[4,434006];
 		Symbols = new int[3, 64];
-		i = 0;
+		//i = 0;
 		//times=-1;
 		Life = 150;
 		score = 0;
@@ -57,7 +60,7 @@ public class Game : MonoBehaviour {
 		//GameObject.Find ("Camera").GetComponent<Camera> ().enabled = false;
 		GameObject.Find ("Canvas2").GetComponent<Canvas>().enabled=false;
 
-		ArrayMaker ();
+//		ArrayMaker ();
 		i = 0;
 		ArrayMaker2 ();
 
@@ -81,7 +84,7 @@ public class Game : MonoBehaviour {
 	}
 	int ttimes;
 
-	void solving()
+/*	void solving()
 	{
 		if (yy>=64) {
 			passright = true;
@@ -99,7 +102,7 @@ public class Game : MonoBehaviour {
 				yy++;
 			}
 		}
-	}
+	}*/
 
 	public void plus(){
 		ss=ss+"+";//+
@@ -133,27 +136,27 @@ public class Game : MonoBehaviour {
 	}
 	public void n1()
 	{
-		ss += " " + Numbers [0, i]+" ";
+		ss += " " + w+" ";
 		GameObject.Find ("n1").GetComponent<Button>().interactable = false;
 		GameObject.Find ("Title2").GetComponent<Text> ().text = ss;
 	}
 	public void n2()
 	{
-		ss += " " + Numbers [1, i]+" ";
+		ss += " " + x+" ";
 		GameObject.Find ("n2").GetComponent<Button>().interactable = false;
 		GameObject.Find ("Title2").GetComponent<Text> ().text = ss;
 
 	}
 	public void n3()
 	{
-		ss += " " + Numbers [2, i]+" ";
+		ss += " " + y+" ";
 		GameObject.Find ("n3").GetComponent<Button>().interactable = false;
 		GameObject.Find ("Title2").GetComponent<Text> ().text = ss;
 
 	}
 	public void n4()
 	{
-		ss += " " + Numbers [3, i]+" ";
+		ss += " " + z+" ";
 		GameObject.Find ("n4").GetComponent<Button>().interactable = false;
 		GameObject.Find ("Title2").GetComponent<Text> ().text = ss;
 
@@ -225,34 +228,35 @@ public class Game : MonoBehaviour {
 		GameObject.Find ("n2").GetComponent<Button>().interactable = true;
 		GameObject.Find ("n3").GetComponent<Button>().interactable = true;
 		GameObject.Find ("n4").GetComponent<Button>().interactable = true;
+		equalation = 0;
+//		i = hello.Next (0, 434005);
 
-		i = hello.Next (0, 434005);
-		index2 = 0;
-		f5 (Numbers [0, i], Numbers [1, i], Numbers [2, i], Numbers [3, i]);
-		index2 = 0;
-		for (int times = 0; times < 10; times++) {
-			yy = hello.Next (0, 63);
-			Calca(yy,i);
-			answer = ""+kk.Eva(cs);
-			double.TryParse (answer, out equalation);
-			Debug.Log ("right "+equalation);
-			if (equalation == 24) {
-				passright = false;
-				GameObject.Find ("pass").GetComponent<Button> ().interactable = true;
-				goto run;
+		for (yy = 0; yy < 64 && equalation!=24.0000000000; yy++) {
+			
+			index2 = 0;
+			w = hello.Next (1, 13);
+			x = hello.Next (1, 13);
+			y = hello.Next (1, 13);
+			z = hello.Next (1, 13);
+			f5 (w, x, y, z);
+			index2 = 0;
+			while (equalation!=24.0000000000 && index2<24) {
+				Debug.Log ("equals " + equalation);
+				Calca(yy,index2);
 			}
+//			answer = ""+kk.Eva(cs);
 		}
-		yy = 0;
-		InvokeRepeating ("solving", 0f, 0.0002f);
-		run:Debug.Log ("Answer is " + answer);
+		passright = equalation!=24.000000000000;
+		GameObject.Find ("pass").GetComponent<Button> ().interactable = true;
+	//	Debug.Log ("Answer is " + answer);
 		Debug.Log ("equals " + equalation);
 		ss = "";
 	//	times = 0;
 	//	GameObject.Find ("Label").GetComponent<UILabel> ().text = Numbers [0, i] + "   " + Numbers [1, i] + "   " + Numbers [2, i] + "   " + Numbers [3, i];
-		GameObject.Find ("nn1").GetComponent<Text>().text=""+Numbers[0,i];
-		GameObject.Find ("nn2").GetComponent<Text>().text=""+Numbers[1,i];
-		GameObject.Find ("nn3").GetComponent<Text>().text=""+Numbers[2,i];
-		GameObject.Find ("nn4").GetComponent<Text>().text=""+Numbers[3,i];//强暴转换
+		GameObject.Find ("nn1").GetComponent<Text>().text=""+w;
+		GameObject.Find ("nn2").GetComponent<Text>().text=""+x;
+		GameObject.Find ("nn3").GetComponent<Text>().text=""+y;
+		GameObject.Find ("nn4").GetComponent<Text>().text=""+z;//强暴转换
 	//	InvokeRepeating ("cc", 0f, 0.03f);
 	}
 	public void reload(){
@@ -285,80 +289,7 @@ public class Game : MonoBehaviour {
 		p2 (2, 3, 4);
 		Debug.Log ("The max is " + i);
 	}
-	public static void ArrayMaker(){
-		int a = 1;
-		int b = 1;
-		int c = 1;
-		int d = 1;
-		for (a = 1; a <=13; a++)
-		{
-			Numbers[0, i] = a;
-			Numbers[1, i] = a;
-			Numbers[2, i] = a;
-			Numbers[3, i] = a;
-			i++;
-			Console.Write("#");
-		}
-		for (a = 1;a<=13; a++)
-		{
-			for (b=1; b <= 13; b++)
-			{
-				if (b != a)
-				{
-					f1(a, a, a, b);
-				}
-			}
-		}
-		for ( a = 1; a <=13; a++)
-		{
-			for (b = 1; b <= 13; b++)
-			{
-				if (b != a)
-				{
-					f2(a, a, b, b);
-				}
-			}
-		}
-		for ( a = 1; a <= 13; a++)
-		{
-			for (b = 1; b <= 13; b++)
-			{
-				if (b!=a)
-				{
-					for (c = 1; c <= 13; c++)
-					{
-						if(c!=b && c!=a){
-							f3(a, a, b, c);
-						}
-					}
-				}
-			}
-		}
-		for ( a = 1; a <= 13; a++)
-		{
-			for ( b = 1; b <= 13; b++)
-			{
-				if (b!=a)
-				{
-					for (c = 1; c <= 13; c++)
-					{
-						if (c!=b&&c!=a)
-						{
-							for (d = 1; d <= 13; d++)
-							{
-								if (d!=a&&d!=b&&d!=c)
-								{
-									f4(a, b, c, d);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	public static int index2;
-	public static int[,] numberss = new int[4, 24];
+
 	public void Calca(int a,int b){
 		for (int index = 0; index <= 2; index++) {
 			switch (Symbols[index,a]) {
@@ -383,6 +314,7 @@ public class Game : MonoBehaviour {
 			}
 		}
 		cs += "" + numberss [3, index2];
+		Debug.Log (cs);
 		equalation=t.Eval (cs);
 		cs = " ";
 		if (equalation == 24) {
@@ -393,61 +325,7 @@ public class Game : MonoBehaviour {
 		}
 		index2++;
 	}
-	public static void f1(int a, int b, int c, int d){
-		Numbers[0, i] = a;
-		Numbers[1, i] = a;
-		Numbers[2, i] = a;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = a;
-		Numbers[2, i] = d;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = d;
-		Numbers[2, i] = a;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = a;
-		Numbers[2, i] = a;
-		Numbers[3, i] = a;
-		i++;
-	}
-	public static void f2(int a, int b, int c, int d)
-	{
-		Numbers[0, i] = a;
-		Numbers[1, i] = a;
-		Numbers[2, i] = d;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = d;
-		Numbers[2, i] = a;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = d;
-		Numbers[2, i] = d;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = d;
-		Numbers[2, i] = a;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = a;
-		Numbers[2, i] = d;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = a;
-		Numbers[2, i] = a;
-		Numbers[3, i] = d;
-		i++;
-	}
+
 	public static void f5(int a,int b,int c,int d)
 	{
 		numberss[0,index2] = a;
@@ -572,192 +450,7 @@ public class Game : MonoBehaviour {
 		index2++;
 	}
 
-	public static void f3(int a, int b, int c, int d)
-	{
-		Numbers[0, i] = a;
-		Numbers[1, i] = a;
-		Numbers[2, i] = c;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = a;
-		Numbers[2, i] = d;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = c;
-		Numbers[2, i] = a;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = c;
-		Numbers[2, i] = d;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = d;
-		Numbers[2, i] = a;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = d;
-		Numbers[2, i] = c;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = a;
-		Numbers[2, i] = a;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = a;
-		Numbers[2, i] = d;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = a;
-		Numbers[2, i] = a;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = a;
-		Numbers[2, i] = c;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = c;
-		Numbers[2, i] = a;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = d;
-		Numbers[2, i] = a;
-		Numbers[3, i] = a;
-		i++;
-	}
-	public static void f4(int a, int b, int c, int d)
-	{
-		Numbers[0, i] = a;
-		Numbers[1, i] = b;
-		Numbers[2, i] = c;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = b;
-		Numbers[2, i] = d;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = c;
-		Numbers[2, i] = b;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = c;
-		Numbers[2, i] = d;
-		Numbers[3, i] = b;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = d;
-		Numbers[2, i] = b;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = a;
-		Numbers[1, i] = d;
-		Numbers[2, i] = c;
-		Numbers[3, i] = b;
-		i++;
-		Numbers[0, i] = b;
-		Numbers[1, i] = a;
-		Numbers[2, i] = c;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = b;
-		Numbers[1, i] = a;
-		Numbers[2, i] = d;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = b;
-		Numbers[1, i] = c;
-		Numbers[2, i] = a;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = b;
-		Numbers[1, i] = c;
-		Numbers[2, i] = d;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = b;
-		Numbers[1, i] = d;
-		Numbers[2, i] = a;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = b;
-		Numbers[1, i] = d;
-		Numbers[2, i] = c;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = a;
-		Numbers[2, i] = b;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = a;
-		Numbers[2, i] = d;
-		Numbers[3, i] = b;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = b;
-		Numbers[2, i] = a;
-		Numbers[3, i] = d;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = b;
-		Numbers[2, i] = d;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = d;
-		Numbers[2, i] = a;
-		Numbers[3, i] = b;
-		i++;
-		Numbers[0, i] = c;
-		Numbers[1, i] = d;
-		Numbers[2, i] = b;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = a;
-		Numbers[2, i] = b;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = a;
-		Numbers[2, i] = c;
-		Numbers[3, i] = b;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = b;
-		Numbers[2, i] = a;
-		Numbers[3, i] = c;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = b;
-		Numbers[2, i] = c;
-		Numbers[3, i] = a;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = c;
-		Numbers[2, i] = a;
-		Numbers[3, i] = b;
-		i++;
-		Numbers[0, i] = d;
-		Numbers[1, i] = c;
-		Numbers[2, i] = b;
-		Numbers[3, i] = a;
-		i++;
-	}
+
 	public static void p1(int a,int b,int c){
 		Symbols [0, i] = a;
 		Symbols [1, i] = a;
